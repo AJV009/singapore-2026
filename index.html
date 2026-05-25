@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Singapore · A family postcard journal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Yeseva+One&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<script src="lock-screen.js"></script>
+<style>
+  :root{
+    --paper:#f3e7cd;
+    --paper-2:#ead7b3;
+    --paper-3:#dfc9a0;
+    --ink:#241a13;
+    --ink-2:#4a3625;
+    --ink-soft:#6a5238;
+    --rule:rgba(36,26,19,.18);
+    --rule-2:rgba(36,26,19,.32);
+    --coral:#d6532c;
+    --teal:#1e6b6a;
+    --mustard:#c98a1f;
+    --plum:#5a2d4a;
+    --leaf:#3f6a3f;
+    --good:#3b7a3b;
+    --display:'Yeseva One', Georgia, serif;
+    --display-2:'Caprasimo', Georgia, serif;
+    --hand:'Caveat', 'Comic Sans MS', cursive;
+    --sans:'Outfit', system-ui, sans-serif;
+    --mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .page{width:100%;max-width:1280px;min-width:1280px;margin:0 auto;position:relative;overflow:hidden;background:
+    radial-gradient(1100px 700px at 80% 5%, rgba(214,83,44,.10), transparent 60%),
+    radial-gradient(900px 700px at 10% 35%, rgba(30,107,106,.10), transparent 60%),
+    var(--paper)
+  }
+  .page::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.6;mix-blend-mode:multiply;
+    background-image:
+      radial-gradient(rgba(36,26,19,.04) 1px, transparent 1px),
+      radial-gradient(rgba(36,26,19,.03) 1px, transparent 1px);
+    background-size:3px 3px, 7px 7px;background-position:0 0, 2px 2px}
+
+  .mono{font-family:var(--mono)}
+  .display{font-family:var(--display)}
+  .hand{font-family:var(--hand)}
+  a{color:inherit}
+
+  /* ── Sticky trip bar ───────────────────────────────── */
+  .tripBar{position:sticky;top:0;z-index:30;background:rgba(243,231,205,.88);backdrop-filter:blur(14px);border-bottom:2px dashed var(--rule);padding:14px 32px;display:grid;grid-template-columns:auto 1fr auto auto;gap:24px;align-items:center}
+  .tripBar .brand{display:flex;align-items:center;gap:12px}
+  .tripBar .seal{width:38px;height:38px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:16px;transform:rotate(-6deg);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+  .tripBar .brand .t{font-family:var(--display);font-size:18px;line-height:1}
+  .tripBar .brand .s{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
+  .tripBar .progressWrap{display:flex;flex-direction:column;justify-content:center;max-width:540px}
+  .tripBar .pLabel{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:6px}
+  .tripBar .pLabel b{color:var(--coral);font-weight:500}
+  .tripBar .pBar{height:10px;background:var(--paper-3);border:1.5px solid var(--ink);position:relative;overflow:hidden}
+  .tripBar .pBar .fill{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(45deg,var(--coral) 0 6px,#b9421f 6px 12px);transition:width .35s ease}
+  .tripBar .countdown{text-align:right}
+  .tripBar .countdown .n{font-family:var(--display);font-size:30px;line-height:1;color:var(--coral)}
+  .tripBar .countdown .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
+  .tripBar .btnRow{display:flex;gap:8px}
+  .barBtn{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:transparent;border:1.5px solid var(--ink);color:var(--ink);padding:8px 10px;cursor:pointer;transition:all .15s}
+  .barBtn:hover{background:var(--ink);color:var(--paper)}
+  .barBtn.primary{background:var(--ink);color:var(--paper)}
+  .barBtn.primary:hover{background:var(--coral);border-color:var(--coral)}
+
+  /* ── Top strip ─────────────────────────────────────── */
+  .strip{display:flex;justify-content:space-between;align-items:center;padding:18px 40px;border-bottom:2px dashed var(--rule);position:relative;z-index:1}
+  .strip .brand{display:flex;align-items:center;gap:14px}
+  .strip .seal{width:42px;height:42px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:18px;transform:rotate(-6deg);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+  .strip .brand .t{font-family:var(--display);font-size:22px}
+  .strip .right{display:flex;gap:14px;align-items:center}
+  .strip .item{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-2)}
+  .strip .stamp{border:2px solid var(--ink);padding:6px 12px;transform:rotate(-3deg);font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);background:rgba(255,255,255,.4)}
+
+  /* ── Hero ──────────────────────────────────────────── */
+  .hero{padding:48px 40px 24px;position:relative;z-index:1}
+  .heroTop{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end}
+  .heroEy{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin-bottom:24px}
+  .heroEy::before{content:'';width:36px;height:2px;background:var(--coral)}
+  h1.bigTitle{font-family:var(--display);font-size:180px;line-height:.95;letter-spacing:-.01em;color:var(--ink);position:relative}
+  h1.bigTitle .sub{font-family:var(--display-2);font-size:58px;display:block;color:var(--coral);margin-top:18px;letter-spacing:.005em;line-height:1}
+  h1.bigTitle .star{position:absolute;color:var(--mustard);font-family:var(--display);font-size:64px;top:14px;right:24px;transform:rotate(12deg);line-height:1}
+  .heroDeck{font-family:var(--display);font-size:30px;line-height:1.2;color:var(--ink-2);max-width:640px;margin-top:24px;font-weight:400}
+
+  .heroR{display:flex;flex-direction:column;align-items:flex-end;gap:14px;padding-bottom:24px}
+  .postcard-stack{position:relative;width:280px;height:200px}
+  .postcard-stack .pc{position:absolute;inset:0;background:#fff;border:1px solid var(--rule);padding:14px;box-shadow:0 8px 20px rgba(36,26,19,.15)}
+  .postcard-stack .pc:nth-child(1){transform:rotate(-4deg) translate(-14px,-8px);background:var(--paper-2)}
+  .postcard-stack .pc:nth-child(2){transform:rotate(3deg) translate(8px,-2px);background:#fff}
+  .postcard-stack .pc:nth-child(3){transform:rotate(-1.5deg);background:#fff;z-index:2}
+  .postcard-stack .pc .l{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .postcard-stack .pc .v{font-family:var(--display);font-size:30px;margin-top:6px;line-height:1}
+  .postcard-stack .pc .v.coral{color:var(--coral)}
+  .postcard-stack .pc .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-size:12px;color:var(--ink-2)}
+  .postcard-stack .pc .row b{font-family:var(--display);font-size:16px;color:var(--ink)}
+
+  .heroBar{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:40px 40px 0;border:2px solid var(--ink);background:var(--paper-2);position:relative;z-index:1}
+  .heroBar .col{padding:18px 22px;border-right:2px solid var(--ink);position:relative}
+  .heroBar .col:last-child{border-right:none}
+  .heroBar .col .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .heroBar .col .v{font-family:var(--display);font-size:38px;line-height:1;margin-top:6px}
+  .heroBar .col .v.coral{color:var(--coral)}
+  .heroBar .col .v.teal{color:var(--teal)}
+  .heroBar .col .v.good{color:var(--good)}
+  .heroBar .col .s{font-size:12px;color:var(--ink-2);margin-top:6px}
+  .heroBar .col .mini{height:6px;background:var(--paper-3);border:1.5px solid var(--ink);margin-top:10px;overflow:hidden;position:relative}
+  .heroBar .col .mini .fill{position:absolute;inset:0;background:repeating-linear-gradient(45deg,var(--good) 0 5px,#2d5e2d 5px 10px);transform-origin:left;transition:transform .35s}
+
+  /* ── Section ────────────────────────────────────────── */
+  section{padding:72px 40px 0;position:relative;z-index:1}
+  .secHead{margin-bottom:32px;display:flex;justify-content:space-between;align-items:end;gap:32px}
+  .secHead .l{flex:1}
+  .secHead .ey{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+  .secHead h2{font-family:var(--display);font-size:64px;line-height:1;letter-spacing:-.01em;margin-top:8px;color:var(--ink)}
+  .secHead h2 em{font-style:normal;color:var(--coral)}
+  .secHead .meta{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);text-align:right;line-height:1.7}
+  .secHead .meta b{font-family:var(--display);font-size:20px;letter-spacing:0;color:var(--coral);display:block;margin-top:4px;text-transform:none;line-height:1.1}
+
+  /* ── Essentials: ticket + hotel + travellers ──────── */
+  .essRow{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px}
+  .ticket{background:#fff;border:2px solid var(--ink);padding:24px;position:relative;box-shadow:6px 6px 0 var(--ink)}
+  .ticket::before,.ticket::after{content:'';position:absolute;width:24px;height:24px;background:var(--paper);border:2px solid var(--ink);border-radius:50%;top:50%;transform:translateY(-50%)}
+  .ticket::before{left:-14px}
+  .ticket::after{right:-14px}
+  .ticket .tHead{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:2px dashed var(--rule)}
+  .ticket .tHead .l{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .ticket .tHead .r{font-family:var(--mono);font-size:11px;color:var(--coral);letter-spacing:.08em}
+  .leg{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;padding:18px 0;border-bottom:2px dashed var(--rule)}
+  .leg:last-child{border-bottom:none}
+  .leg .city{font-family:var(--display);font-size:38px;line-height:1}
+  .leg .when{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.06em;margin-top:4px}
+  .leg .mid .code{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:.08em;text-align:center}
+  .leg .mid .plane{font-family:var(--display);font-size:24px;color:var(--coral);text-align:center;margin:4px 0}
+  .leg .mid .dur{font-family:var(--mono);font-size:10px;color:var(--ink-soft);text-align:center}
+  .leg .r{text-align:right}
+
+  .hotelCard{background:#fff;border:2px solid var(--ink);padding:22px;position:relative;box-shadow:6px 6px 0 var(--ink);transform:rotate(-1deg)}
+  .hotelCard .stamp{position:absolute;top:14px;right:14px;width:78px;height:78px;border:2px solid var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--coral);font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;text-align:center;line-height:1.2;transform:rotate(8deg)}
+  .hotelCard .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+  .hotelCard h3{font-family:var(--display);font-size:36px;line-height:.95;letter-spacing:-.01em}
+  .hotelCard p{font-size:14px;color:var(--ink-2);margin-top:10px;line-height:1.55}
+  .hotelCard .mm{display:flex;gap:14px;margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.06em}
+
+  .pplCard{background:#fff;border:2px solid var(--ink);padding:22px;box-shadow:6px 6px 0 var(--ink);transform:rotate(.8deg)}
+  .pplCard .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+  .pplCard .row{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--rule)}
+  .pplCard .row:last-child{border-bottom:none}
+  .pplCard .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--display);font-size:18px;transform:rotate(-3deg)}
+  .pplCard .row:nth-child(2) .av{background:var(--coral)}
+  .pplCard .row:nth-child(3) .av{background:var(--teal)}
+  .pplCard .row:nth-child(4) .av{background:var(--mustard)}
+  .pplCard .row:nth-child(5) .av{background:var(--plum)}
+  .pplCard .n{font-family:var(--display);font-size:18px;line-height:1}
+  .pplCard .t{font-size:12px;color:var(--ink-2);margin-top:2px}
+  .pplCard .r{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* ── Day chip nav ──────────────────────────────────── */
+  .dayJump{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:32px}
+  .jchip{background:#fff;border:2px solid var(--ink);padding:14px 14px 12px;cursor:pointer;text-decoration:none;color:var(--ink);position:relative;transition:transform .15s, box-shadow .15s}
+  .jchip:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+  .jchip .n{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .jchip .d{font-family:var(--display);font-size:22px;line-height:1.05;margin-top:4px;letter-spacing:-.01em}
+  .jchip .when{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin-top:6px;letter-spacing:.04em}
+  .jchip .miniBar{height:5px;background:var(--paper-3);border:1px solid var(--ink);margin-top:10px;overflow:hidden;position:relative}
+  .jchip .miniBar .fill{position:absolute;inset:0;background:var(--good);transform-origin:left;transition:transform .3s}
+  .jchip.today{background:var(--coral);color:#fff;border-color:var(--coral);box-shadow:4px 4px 0 var(--ink)}
+  .jchip.today .n,.jchip.today .when{color:rgba(255,255,255,.85)}
+  .jchip.today .miniBar{border-color:#fff;background:rgba(255,255,255,.25)}
+  .jchip.today .miniBar .fill{background:#fff}
+  .jchip.past{opacity:.66}
+  .jchip.done .checkSign{position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--good);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+  /* ── Day card ──────────────────────────────────────── */
+  .dayList{display:flex;flex-direction:column;gap:48px}
+  .dayCard{background:#fff;border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);position:relative;padding:32px 32px 28px;scroll-margin-top:120px}
+  .dayCard::after{content:'';position:absolute;left:-12px;top:30px;width:60px;height:24px;background:rgba(214,83,44,.55);border:1px solid var(--coral);transform:rotate(-8deg);box-shadow:0 2px 0 rgba(0,0,0,.08)}
+  .dayCard[data-n="1"]::after{background:rgba(30,107,106,.45);border-color:var(--teal)}
+  .dayCard[data-n="2"]::after{background:rgba(214,83,44,.55);border-color:var(--coral)}
+  .dayCard[data-n="3"]::after{background:rgba(63,106,63,.45);border-color:var(--leaf)}
+  .dayCard[data-n="4"]::after{background:rgba(201,138,31,.55);border-color:var(--mustard)}
+  .dayCard[data-n="5"]::after{background:rgba(90,45,74,.45);border-color:var(--plum)}
+  .dayCard[data-n="6"]::after{background:rgba(214,83,44,.55);border-color:var(--coral)}
+  .dayCard[data-n="7"]::after{background:rgba(30,107,106,.45);border-color:var(--teal)}
+
+  .dayCard.today{box-shadow:8px 8px 0 var(--coral),0 0 0 4px var(--coral)}
+  .dayCard.past{opacity:.92}
+
+  .dayHead{display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:center;padding-bottom:24px;border-bottom:2px dashed var(--rule);margin-bottom:28px;position:relative}
+  .dayHead .num{font-family:var(--display);font-size:120px;line-height:.85;color:var(--coral)}
+  .dayCard[data-n="3"] .dayHead .num{color:var(--leaf)}
+  .dayCard[data-n="4"] .dayHead .num{color:var(--mustard)}
+  .dayCard[data-n="5"] .dayHead .num{color:var(--plum)}
+  .dayCard[data-n="6"] .dayHead .num{color:var(--coral)}
+  .dayCard[data-n="7"] .dayHead .num{color:var(--teal)}
+  .dayCard[data-n="1"] .dayHead .num{color:var(--teal)}
+  .dayHead .mid .when{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:10px}
+  .statusPill{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border:1.5px solid var(--ink-soft);color:var(--ink-soft)}
+  .statusPill.today{background:var(--coral);color:#fff;border-color:var(--coral)}
+  .statusPill.past{background:var(--paper-3);color:var(--ink-soft)}
+  .dayHead .mid h3{font-family:var(--display);font-size:42px;line-height:1;letter-spacing:-.01em;margin-top:6px;color:var(--ink)}
+  .dayHead .mid .tag{font-size:16px;color:var(--ink-2);margin-top:8px;font-family:var(--display);font-weight:400}
+
+  .dayHead .right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:180px}
+  .stamp-round{width:90px;height:90px;border-radius:50%;border:2px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:var(--paper-2);transform:rotate(-6deg)}
+  .stamp-round b{font-family:var(--display);font-size:22px;letter-spacing:0;margin-top:2px}
+  .dayProg{width:160px;text-align:right}
+  .dayProg .pBar{height:10px;background:var(--paper-3);border:1.5px solid var(--ink);overflow:hidden;position:relative;margin-top:6px}
+  .dayProg .pBar .fill{position:absolute;inset:0;background:repeating-linear-gradient(45deg,var(--good) 0 5px,#2d5e2d 5px 10px);transform-origin:left;transition:transform .35s}
+  .dayProg .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .dayProg .lbl b{font-family:var(--display);font-size:14px;color:var(--good);letter-spacing:0}
+
+  .todayStamp{position:absolute;top:-18px;right:60px;font-family:var(--display);font-size:24px;letter-spacing:.06em;color:var(--coral);border:3px double var(--coral);padding:6px 18px;background:rgba(255,255,255,.8);transform:rotate(8deg);text-transform:uppercase;z-index:2;box-shadow:0 4px 12px rgba(214,83,44,.2)}
+
+  .dayBody{display:grid;grid-template-columns:1fr 320px;gap:36px}
+  .schedule{display:flex;flex-direction:column}
+
+  /* ── Schedule item with checkbox ───────────────────── */
+  .item{display:grid;grid-template-columns:80px 28px 1fr;gap:14px;padding:14px 0;border-bottom:1px dashed var(--rule);align-items:start;transition:opacity .25s}
+  .item:last-child{border-bottom:none}
+  .item .t{font-family:var(--mono);font-size:13px;color:var(--ink);padding-top:8px;letter-spacing:.04em}
+  .check{flex:none;width:24px;height:24px;border:2px solid var(--ink);background:#fff;cursor:pointer;margin-top:7px;position:relative;padding:0;transition:transform .12s, background .15s}
+  .check:hover{transform:scale(1.08);background:#fff}
+  .check::after{content:'';position:absolute;left:5px;top:1px;width:8px;height:14px;border:solid var(--coral);border-width:0 3px 3px 0;transform:rotate(45deg) scale(0);transform-origin:center;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}
+  .item.starred .check{border-color:var(--coral)}
+  .check.checked{background:#fff}
+  .check.checked::after{transform:rotate(45deg) scale(1)}
+
+  .item .b .ttl{font-family:var(--display);font-size:22px;line-height:1.15;letter-spacing:-.005em;color:var(--ink);position:relative;display:inline-block;padding-right:12px;cursor:pointer}
+  .item.starred .b .ttl::before{content:'';display:inline-block;width:7px;height:7px;background:var(--coral);border-radius:50%;margin-right:8px;transform:translateY(-3px)}
+  .item .b .sub{font-size:13px;color:var(--ink-2);margin-top:4px}
+  .item .b .tag{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;background:var(--paper-2);color:var(--ink-2);padding:3px 8px;border:1px solid var(--rule)}
+  .item.done{opacity:.46}
+  .item.done .b .ttl{text-decoration:line-through;text-decoration-color:var(--coral);text-decoration-thickness:2px;color:var(--ink-soft)}
+  .item.done .b .ttl::after{content:'✓ done';position:absolute;right:-46px;top:2px;font-family:var(--hand);font-size:18px;color:var(--good);transform:rotate(-6deg);font-style:italic;letter-spacing:0}
+
+  /* ── Polaroid + image slot ─────────────────────────── */
+  .dayAside{display:flex;flex-direction:column;gap:16px}
+  /* polaroid removed — replaced by .mapCard */
+
+  .notepad{background:var(--paper-2);border:2px solid var(--ink);padding:16px;transform:rotate(1deg);position:relative}
+  .notepad::before{content:'';position:absolute;left:18px;right:18px;top:48px;bottom:18px;background-image:repeating-linear-gradient(transparent 0 18px, rgba(36,26,19,.12) 18px 19px);opacity:.6;pointer-events:none}
+  .notepad .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+  .notepad .v{font-family:var(--display);font-size:18px;line-height:1.3;color:var(--ink);position:relative;z-index:1}
+  .notepad .spend{display:flex;justify-content:space-between;margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.06em;position:relative;z-index:1}
+  .notepad .spend b{font-family:var(--display);font-size:18px;color:var(--coral)}
+
+  /* ── Journal note ──────────────────────────────────── */
+  .journal{background:#fff;border:2px solid var(--ink);padding:16px;box-shadow:4px 4px 0 var(--ink);transform:rotate(-.5deg);position:relative}
+  .journal .l{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+  .journal .l .dot{display:inline-block;width:7px;height:7px;background:var(--coral);border-radius:50%;margin-right:6px}
+  .journal textarea{width:100%;border:none;background:transparent;font-family:var(--hand);font-size:22px;line-height:1.35;color:var(--ink);resize:none;outline:none;min-height:84px;
+    background-image:repeating-linear-gradient(transparent 0 32px, rgba(36,26,19,.12) 32px 33px);background-position:0 8px;padding:0}
+  .journal textarea::placeholder{color:var(--ink-soft);opacity:.55;font-style:italic}
+  .journal .count{font-family:var(--mono);font-size:10px;color:var(--ink-soft);text-align:right;margin-top:8px;letter-spacing:.06em}
+
+  /* ── Food postcard grid ────────────────────────────── */
+  .foodGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .foodCard{background:#fff;border:2px solid var(--ink);padding:16px 16px 18px;box-shadow:5px 5px 0 var(--ink);position:relative;cursor:pointer;transition:transform .15s}
+  .foodCard:nth-child(3n+1){transform:rotate(-.7deg)}
+  .foodCard:nth-child(3n+2){transform:rotate(.6deg)}
+  .foodCard:nth-child(3n){transform:rotate(-1.2deg)}
+  .foodCard:hover{transform:translate(-2px,-2px) rotate(0deg)}
+  .foodCard .num{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center}
+  .foodCard .num .tickMini{width:18px;height:18px;border:2px solid var(--ink);background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:var(--coral);font-weight:700;font-family:var(--sans)}
+  .foodCard.tried{background:var(--paper-2)}
+  .foodCard.tried .num .tickMini{background:var(--coral);color:#fff}
+  .foodCard.tried .num .tickMini::after{content:'✓'}
+  .foodCard.tried .dish{text-decoration:line-through;text-decoration-color:var(--coral);text-decoration-thickness:2px;color:var(--ink-soft)}
+  .foodCard .dish{font-family:var(--display);font-size:28px;letter-spacing:-.005em;line-height:1;margin-top:6px;color:var(--ink)}
+  .foodCard .where{font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.4}
+  .foodCard .foot{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule)}
+  .foodCard .price{font-family:var(--mono);font-size:13px;color:var(--coral);letter-spacing:.04em}
+  .foodCard .tag{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
+
+  /* ── Budget + bookings ─────────────────────────────── */
+  .moneyRow{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .moneyCard{background:#fff;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:24px}
+  .moneyCard h3{font-family:var(--display);font-size:34px;margin-bottom:14px;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline}
+  .moneyCard h3 .count{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.12em;text-transform:uppercase}
+
+  .bookRow{display:grid;grid-template-columns:24px 1fr auto auto;gap:14px;align-items:center;padding:11px 0;border-bottom:1px dashed var(--rule)}
+  .bookRow:last-child{border-bottom:none}
+  .bookRow.done .nm{text-decoration:line-through;text-decoration-color:var(--coral);color:var(--ink-soft)}
+  .bookRow.done{opacity:.55}
+  .bookRow .nm{font-family:var(--display);font-size:18px}
+  .bookRow .wh{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+  .bookRow .ur{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--ink);background:var(--paper-2);white-space:nowrap}
+  .bookRow .ur.now{background:var(--coral);color:#fff;border-color:var(--coral)}
+  .bookRow .ur.this{background:var(--mustard);color:#fff;border-color:var(--mustard)}
+
+  .bRow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--rule)}
+  .bRow .cat{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding:3px 6px;border:1px solid var(--rule);background:var(--paper-2);white-space:nowrap}
+  .bRow .cat.book{color:var(--coral);border-color:var(--coral)}
+  .bRow .cat.payg{color:var(--teal);border-color:var(--teal)}
+  .bRow .l{font-family:var(--display);font-size:16px}
+  .bRow .v{font-family:var(--mono);font-size:13px;text-align:right}
+  .moneyCard .total{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0 6px;border-top:2px solid var(--ink);margin-top:10px}
+  .moneyCard .total .l{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .moneyCard .total .v{font-family:var(--display);font-size:36px;color:var(--coral)}
+
+  /* ── Practical + pack ──────────────────────────────── */
+  .practRow{display:grid;grid-template-columns:1.1fr 1fr;gap:24px}
+  .pCard{background:#fff;border:2px solid var(--ink);padding:24px;box-shadow:6px 6px 0 var(--ink)}
+  .pCard h3{font-family:var(--display);font-size:30px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline}
+  .pCard h3 .count{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.12em;text-transform:uppercase}
+  .pRow{display:grid;grid-template-columns:140px 1fr;gap:14px;padding:10px 0;border-bottom:1px dashed var(--rule);align-items:start}
+  .pRow:last-child{border-bottom:none}
+  .pRow .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding-top:3px}
+  .pRow .v{font-size:14px;color:var(--ink-2);line-height:1.5}
+
+  .packList{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:14px}
+  .packList .i{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:17px;color:var(--ink);cursor:pointer;padding:4px 0}
+  .packList .i .check{width:20px;height:20px;margin-top:0;flex:none}
+  .packList .i .check::after{left:4px;top:0;width:6px;height:11px;border-width:0 2.5px 2.5px 0}
+  .packList .i.done{opacity:.5}
+  .packList .i.done span{text-decoration:line-through;text-decoration-color:var(--coral);text-decoration-thickness:2px}
+
+  .avoidBox{margin-top:18px;background:var(--paper-2);padding:14px;border:1px dashed var(--coral)}
+  .avoidBox h4{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral);margin-bottom:8px}
+  .avoidBox div{font-size:13px;color:var(--ink-2);padding:4px 0;display:flex;gap:6px}
+  .avoidBox div::before{content:'×';color:var(--coral);font-weight:700}
+
+  /* ── Floating "today" pill + date scrubber ────────── */
+  .hud{position:fixed;right:24px;bottom:24px;z-index:40;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+  .hudPill{background:var(--ink);color:var(--paper);padding:14px 18px;border-radius:999px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.25);transition:transform .15s}
+  .hudPill:hover{transform:translateY(-2px)}
+  .hudPill .dot{width:10px;height:10px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 0 rgba(214,83,44,.6);animation:pulse 2.2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(214,83,44,.55)}70%{box-shadow:0 0 0 12px rgba(214,83,44,0)}100%{box-shadow:0 0 0 0 rgba(214,83,44,0)}}
+  .hudPill .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,231,205,.7)}
+  .hudPill .v{font-family:var(--display);font-size:18px;line-height:1}
+  .hudMini{background:#fff;border:2px solid var(--ink);padding:10px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:4px 4px 0 var(--ink);max-width:280px}
+  .hudMini .l{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .hudMini input[type=date]{font-family:var(--mono);font-size:12px;border:none;background:transparent;padding:2px 0;color:var(--ink);width:100%}
+  .hudMini .row{display:flex;align-items:center;gap:8px}
+  .hudMini button{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);background:transparent;cursor:pointer;padding:4px 6px}
+  .hudMini button:hover{background:var(--ink);color:var(--paper)}
+  .hudMini .hint{font-family:var(--mono);font-size:9px;color:var(--ink-soft);line-height:1.4}
+
+  /* ── Footer ─────────────────────────────────────────── */
+  footer{margin-top:80px;padding:48px 40px;background:var(--ink);color:var(--paper);position:relative;z-index:1}
+  footer .inner{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end}
+  footer .bigLine{font-family:var(--display);font-size:44px;line-height:1.05;letter-spacing:-.01em}
+  footer .bigLine em{color:var(--mustard);font-style:normal}
+  footer .signoff{text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;line-height:1.8;color:rgba(243,231,205,.7)}
+
+  /* ── Lock screen ────────────────────────────────────── */
+  body.locked .page,body.locked .hud{visibility:hidden}
+  #lockOverlay{position:fixed;inset:0;z-index:9999;background:var(--paper);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;
+    background-image:radial-gradient(900px 600px at 50% 40%,rgba(214,83,44,.08),transparent 70%)}
+  #lockOverlay .seal{width:64px;height:64px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;transform:rotate(-6deg);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+  #lockOverlay h2{font-family:var(--display);font-size:48px;margin-top:8px;letter-spacing:-.01em}
+  #lockOverlay p{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  #lockOverlay .lockBox{display:flex;gap:10px;margin-top:8px}
+  #lockPw{font-family:var(--mono);font-size:14px;padding:12px 16px;border:2px solid var(--ink);background:#fff;width:260px;outline:none;letter-spacing:.08em}
+  #lockPw:focus{border-color:var(--coral)}
+  #lockBtn{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:12px 20px;background:var(--ink);color:var(--paper);border:2px solid var(--ink);cursor:pointer;transition:background .15s}
+  #lockBtn:hover{background:var(--coral);border-color:var(--coral)}
+  #lockBtn:disabled{opacity:.5;cursor:wait}
+  #lockErr{font-family:var(--mono);font-size:12px;color:var(--coral);height:18px;letter-spacing:.06em}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+  #lockPw.shake{animation:shake .4s ease}
+
+  /* ── Map embed (replaces polaroid) ─────────────────── */
+  .mapCard{background:#fff;border:1px solid var(--rule);padding:10px 10px 14px;box-shadow:0 6px 12px rgba(36,26,19,.12);transform:rotate(-2deg);position:relative}
+  .mapCard iframe{display:block;width:100%;height:220px;border:none;border-radius:0}
+  .mapCard .cap{margin-top:8px;font-family:var(--display);font-size:16px;color:var(--ink);text-align:center;letter-spacing:-.005em;line-height:1.2}
+  .mapCard .cap em{color:var(--coral);font-style:normal}
+
+  /* helpers */
+  .hidden{display:none !important}
+
+  /* print */
+  @media print{
+    .tripBar,.hud{display:none}
+    .page{box-shadow:none}
+    .dayCard,.foodCard,.pCard,.moneyCard,.hotelCard,.pplCard,.journal{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body class="locked">
+<div id="lockOverlay">
+  <div class="seal">SG</div>
+  <h2>Singapore 2026</h2>
+  <p>This itinerary is private</p>
+  <div class="lockBox">
+    <input type="password" id="lockPw" placeholder="Password" autofocus>
+    <button id="lockBtn">Unlock</button>
+  </div>
+  <div id="lockErr"></div>
+</div>
+<div class="page">
+
+  <!-- ── Sticky trip bar ───────────────────────────── -->
+  <div class="tripBar">
+    <div class="brand">
+      <div class="seal">SG</div>
+      <div>
+        <div class="t">Singapore <span style="color:var(--coral)">2026</span></div>
+        <div class="s">29 May → 4 June · party of four</div>
+      </div>
+    </div>
+    <div class="progressWrap">
+      <div class="pLabel"><span>Trip progress</span><span><b id="progTxt">0 / 42</b> stops checked</span></div>
+      <div class="pBar"><div class="fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="countdown" id="countdown">
+      <div class="n">17</div>
+      <div class="l">days to go</div>
+    </div>
+    <div class="btnRow">
+      <button class="barBtn" id="btnJump">Jump to today</button>
+      <button class="barBtn" id="btnReset" title="Reset all checks &amp; notes">Reset</button>
+    </div>
+  </div>
+
+  <!-- ── Decorative strip ──────────────────────────── -->
+  <div class="strip">
+    <div class="brand">
+      <div class="seal">✺</div>
+      <div class="t">A family postcard from Singapore</div>
+    </div>
+    <div class="right">
+      <span class="item">Vol. 26 · Issue 06</span>
+      <span class="stamp">29 May → 04 Jun · 2026</span>
+    </div>
+  </div>
+
+  <!-- ── Hero ──────────────────────────────────────── -->
+  <header class="hero">
+    <div class="heroTop">
+      <div class="heroL">
+        <div class="heroEy">A one-week postcard journal · REDACTED</div>
+        <h1 class="bigTitle">
+          Singa<span class="star">✺</span>pore<br>
+          <span class="sub">the family edition.</span>
+        </h1>
+        <p class="heroDeck">Temple trinities, a chocolate factory matinee, two mornings at Mandai, one Michelin Peranakan dinner, and one packed Sentosa day before the dawn flight home — tick things off as we go, scribble notes, paste in photos.</p>
+      </div>
+      <div class="heroR">
+        <div class="postcard-stack">
+          <div class="pc"></div>
+          <div class="pc">
+            <div class="l">Flight</div>
+            <div class="v coral">REDACTED</div>
+            <div class="row"><span>REDACTED</span><b>10:05 → 18:30</b></div>
+          </div>
+          <div class="pc">
+            <div class="l">Stay · 5 nights</div>
+            <div class="v">REDACTED</div>
+            <div class="row"><span>City Hall · 5 min walk</span><b>2 BR suite</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="heroBar">
+    <div class="col"><div class="l">Travellers</div><div class="v">04</div><div class="s">Dad · Mum · You · Sister</div></div>
+    <div class="col"><div class="l">Days</div><div class="v coral">07</div><div class="s">5 nights at REDACTED</div></div>
+    <div class="col"><div class="l">Stops planned</div><div class="v teal" id="heroTotalStops">53</div><div class="s">across the seven days</div></div>
+    <div class="col">
+      <div class="l">Checked off</div>
+      <div class="v good" id="heroDoneN">0</div>
+      <div class="mini"><div class="fill" id="heroDoneFill" style="transform:scaleX(0)"></div></div>
+    </div>
+    <div class="col"><div class="l">All-in</div><div class="v">₹3.5 L</div><div class="s">realistic, four pax</div></div>
+  </div>
+
+  <!-- ── Essentials ────────────────────────────────── -->
+  <section>
+    <div class="secHead">
+      <div class="l">
+        <div class="ey">§ 01 — getting there &amp; staying there</div>
+        <h2>The <em>essentials.</em></h2>
+      </div>
+    </div>
+    <div class="essRow">
+      <div class="ticket">
+        <div class="tHead"><div class="l">Air India · Economy Value</div><div class="r">PNR · REDACTED</div></div>
+        <div class="leg">
+          <div><div class="city">BOM</div><div class="when">Fri 29 May · REDACTED</div></div>
+          <div class="mid"><div class="code">REDACTED</div><div class="plane">✈</div><div class="dur">5h 55m</div></div>
+          <div class="r"><div class="city">SIN</div><div class="when">Fri 29 May · REDACTED</div></div>
+        </div>
+        <div class="leg">
+          <div><div class="city">SIN</div><div class="when">Thu 04 Jun · REDACTED</div></div>
+          <div class="mid"><div class="code">REDACTED</div><div class="plane">✈</div><div class="dur">5h 40m</div></div>
+          <div class="r"><div class="city">BOM</div><div class="when">Thu 04 Jun · REDACTED</div></div>
+        </div>
+      </div>
+
+      <div class="hotelCard">
+        <div class="stamp">5 nights<br>City Hall</div>
+        <div class="l">Stay</div>
+        <h3>REDACTED<br>Singapore</h3>
+        <p>REDACTED · City Hall MRT five minutes on foot · two-bedroom suite for the four of us · breakfast included.</p>
+        <div class="mm"><span>Agoda · REDACTED</span></div>
+        <div class="mm" style="margin-top:4px"><span>Visa REDACTED · non-refundable</span></div>
+      </div>
+
+      <div class="pplCard">
+        <div class="l">The party</div>
+        <div id="ppl"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Day quick nav ─────────────────────────────── -->
+  <section>
+    <div class="secHead">
+      <div class="l">
+        <div class="ey">§ 02 — seven postcards, one per day</div>
+        <h2>The <em>itinerary,</em> day by day.</h2>
+      </div>
+      <div class="meta">
+        <div>Tap any item to tick it off</div>
+        <b id="dayDoneSummary">0 of 7 days started</b>
+      </div>
+    </div>
+    <div class="dayJump" id="dayJump"></div>
+    <div class="dayList" id="dayList"></div>
+  </section>
+
+  <!-- ── Food ──────────────────────────────────────── -->
+  <section>
+    <div class="secHead">
+      <div class="l">
+        <div class="ey">§ 03 — twelve postcards from the table</div>
+        <h2>What we <em>ate.</em></h2>
+      </div>
+      <div class="meta">
+        <div>Click any dish to mark as tried</div>
+        <b><span id="foodDone">0</span> / 12 dishes tried</b>
+      </div>
+    </div>
+    <div class="foodGrid" id="foodGrid"></div>
+  </section>
+
+  <!-- ── Money ─────────────────────────────────────── -->
+  <section>
+    <div class="secHead">
+      <div class="l">
+        <div class="ey">§ 04 — money, line by line</div>
+        <h2>The <em>damages.</em></h2>
+      </div>
+      <div class="meta">
+        <div>Tick bookings as you confirm them</div>
+      </div>
+    </div>
+    <div class="moneyRow">
+      <div class="moneyCard">
+        <h3>Bookings to make <span class="count" id="bookCount">0 / 11 confirmed</span></h3>
+        <div id="bookList"></div>
+      </div>
+      <div class="moneyCard">
+        <h3>Where it goes <span class="count">16 lines · what you'll pay for</span></h3>
+        <div id="budgetRows"></div>
+        <div class="total">
+          <div class="l">Grand total · 4 pax</div>
+          <div class="v">₹3.23 – 3.84 L</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Practical ─────────────────────────────────── -->
+  <section>
+    <div class="secHead">
+      <div class="l">
+        <div class="ey">§ 05 — the rest of it</div>
+        <h2>Field <em>notes.</em></h2>
+      </div>
+    </div>
+    <div class="practRow">
+      <div class="pCard">
+        <h3>On the ground</h3>
+        <div id="practList"></div>
+      </div>
+      <div class="pCard">
+        <h3>Packing <span class="count" id="packCount">0 / 8 packed</span></h3>
+        <div class="packList" id="packList"></div>
+        <div class="avoidBox">
+          <h4>Things we will not be doing</h4>
+          <div id="avoidList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="inner">
+      <div class="bigLine">Eat the satay <em>outdoors,</em><br>skip Tian Tian, and reach<br>the airport <em>four hours</em> early.</div>
+      <div class="signoff">
+        SG · 2026<br>
+        For REDACTED<br>
+        REDACTED<br><br>
+        Tick · scribble · paste<br>
+        Postcard journal · v.2
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ── Floating HUD ──────────────────────────────────── -->
+<div class="hud" id="hud">
+  <div class="hudMini hidden" id="hudMini">
+    <div class="l">Simulate date</div>
+    <div class="row">
+      <input type="date" id="fakeDate" min="2026-04-01" max="2026-07-01">
+      <button id="clearFake">Use real</button>
+    </div>
+    <div class="hint">Preview today's status for any date — useful before, during, or after the trip.</div>
+  </div>
+  <div class="hudPill" id="hudPill">
+    <span class="dot"></span>
+    <div>
+      <div class="l" id="hudLbl">Days to takeoff</div>
+      <div class="v" id="hudVal">17 days</div>
+    </div>
+  </div>
+</div>
+
+<script src="trip-app.js"></script>
+<script>
+window.bootTrip = function() {
+  const T = window.TRIP;
+  const App = window.TripApp;
+  const ini = (n) => n.split(' ').map(p=>p[0]).slice(0,2).join('');
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+  // ── Travellers ──
+  $('#ppl').innerHTML = T.travellers.map(p=>`
+    <div class="row">
+      <div class="av">${ini(p.name)}</div>
+      <div><div class="n">${p.name.split(' ')[0]}</div><div class="t">${p.tag}</div></div>
+      <div class="r">${p.role}</div>
+    </div>`).join('');
+
+  // ── Day jump chips ──
+  $('#dayJump').innerHTML = T.days.map(d=>`
+    <a class="jchip" data-jump="${d.n}" data-n="${d.n}" href="#day-${d.n}">
+      <div class="n">Day ${String(d.n).padStart(2,'0')}</div>
+      <div class="d">${d.hero}</div>
+      <div class="when">${d.date}</div>
+      <div class="miniBar"><div class="fill" style="transform:scaleX(0)"></div></div>
+      <div class="checkSign hidden">✓</div>
+    </a>`).join('');
+
+  // ── Day cards ──
+  const dayMoods = {
+    1:['Hello, Singapore.','arrival evening'],
+    2:['The anchor day.','heritage + matinee + crab'],
+    3:['Sunday slow.','mass · gardens · trees that sing'],
+    4:['Birds, then pandas.','Mandai · day one'],
+    5:['Canopy &amp; Candlenut.','adventure · ION · Michelin'],
+    6:['Sentosa, all of it.','the packed day'],
+    7:['One last walk.','Jewel + home'],
+  };
+
+  $('#dayList').innerHTML = T.days.map(d=>`
+    <article class="dayCard" data-n="${d.n}" id="day-${d.n}">
+      <div class="dayHead">
+        <div class="num">${String(d.n).padStart(2,'0')}</div>
+        <div class="mid">
+          <div class="when">${d.weekday} · ${d.date} <span class="statusPill" data-status></span></div>
+          <h3>${d.theme}</h3>
+          <div class="tag">${d.tagline}</div>
+        </div>
+        <div class="right">
+          <div class="stamp-round">Day<b>${d.n}</b></div>
+          <div class="dayProg">
+            <div class="lbl"><b><span data-day-done="${d.n}">0</span>/${d.blocks.length}</b> done</div>
+            <div class="pBar"><div class="fill" data-day-fill="${d.n}" style="transform:scaleX(0)"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dayBody">
+        <div class="schedule">
+          ${d.blocks.map((b,idx)=>{
+            const id = `d${d.n}-${idx}`;
+            return `
+              <div class="item ${b.star?'starred':''}" data-item="${id}">
+                <div class="t">${b.time}</div>
+                <button class="check" data-group="done" data-id="${id}" aria-label="Mark done"></button>
+                <div class="b">
+                  <div class="ttl" data-toggle="${id}">${b.title}</div>
+                  ${b.sub?`<div class="sub">${b.sub}</div>`:''}
+                  <span class="tag">${b.tag}</span>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+        <aside class="dayAside">
+          <div class="mapCard">
+            <iframe src="https://maps.google.com/maps?q=${d.mapQuery}&t=m&z=14&output=embed&iwloc=near" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Day ${d.n} map"></iframe>
+            <div class="cap"><em>${dayMoods[d.n][0]}</em></div>
+          </div>
+          <div class="notepad">
+            <div class="l">Plan note</div>
+            <div class="v">${d.note}</div>
+            <div class="spend"><span>Day spend · four pax</span><b>${d.spend}</b></div>
+          </div>
+          <div class="journal">
+            <div class="l"><span><span class="dot"></span>Journal — Day ${d.n}</span><span data-jcount="${d.n}">0 chars</span></div>
+            <textarea data-journal="${d.n}" placeholder="how was today? what did we eat, what made us laugh, what surprised us…"></textarea>
+          </div>
+        </aside>
+      </div>
+    </article>`).join('');
+
+  // ── Food cards ──
+  $('#foodGrid').innerHTML = T.food.map((f,i)=>`
+    <div class="foodCard" data-food="f-${i}">
+      <div class="num"><span>№ ${String(i+1).padStart(2,'0')}</span><span class="tickMini"></span></div>
+      <div class="dish">${f.dish}</div>
+      <div class="where">${f.where}</div>
+      <div class="foot">
+        <span class="price">${f.price}</span>
+        <span class="tag">${f.tag}</span>
+      </div>
+    </div>`).join('');
+
+  // ── Bookings ──
+  const urgClass = (u) => u==='NOW' ? 'now' : (u.includes('Before')||u.includes('Tue')||u.includes('This')?'this':'');
+  $('#bookList').innerHTML = T.bookings.map((b,i)=>`
+    <div class="bookRow" data-book="${i}">
+      <button class="check" data-group="bookings" data-id="bk-${i}" aria-label="Mark confirmed"></button>
+      <div class="nm">${b.name}</div>
+      <div class="wh">${b.when}</div>
+      <div class="ur ${urgClass(b.urgency)}">${b.urgency}</div>
+    </div>`).join('');
+
+  // ── Budget ── (informational — booking confirmation lives in Bookings)
+  // Each line is tagged: "pre-book" = covered by a Bookings row,
+  // "in-trip" = paid at point of sale (food / transport / shopping / optional).
+  const budgetCat = {
+    'Mandai 3-Park Pass · S$98×4': 'book',
+    'USS + Express Pass': 'book',
+    'Singapore Flyer': 'payg',
+    'Gardens by the Bay': 'book',
+    'ArtScience Museum': 'book',
+    'Cable Car + Arbora cake': 'book',
+    'Skyline Luge': 'book',
+    'Wings of Time': 'book',
+    'MegaZip (×3)': 'payg',
+    'Harry Potter VOM': 'book',
+    'Charlie & Choc Factory': 'book',
+    'Candlenut Michelin': 'book',
+    'Food (week)': 'payg',
+    'Transport': 'payg',
+    'Gap night at Changi': 'book',
+    'Shopping headroom': 'payg',
+  };
+  $('#budgetRows').innerHTML = T.budget.map((b)=>{
+    const c = budgetCat[b.row] || 'payg';
+    return `
+    <div class="bRow">
+      <span class="cat ${c}">${c==='book'?'pre-book':'in-trip'}</span>
+      <div class="l">${b.row}</div>
+      <div class="v">₹${b.amt}</div>
+    </div>`;
+  }).join('');
+
+  // ── Practical ──
+  $('#practList').innerHTML = T.practical.map(p=>`
+    <div class="pRow"><div class="k">${p.k}</div><div class="v">${p.v}</div></div>`).join('');
+
+  // ── Packing ──
+  $('#packList').innerHTML = T.pack.map((p,i)=>`
+    <div class="i" data-pack="${i}">
+      <button class="check" data-group="packing" data-id="pk-${i}" aria-label="Mark packed"></button>
+      <span>${p}</span>
+    </div>`).join('');
+
+  // ── Avoid ──
+  $('#avoidList').innerHTML = T.avoid.slice(0,5).map(a=>`<div>${a}</div>`).join('');
+
+  // ── Wire up ─────────────────────────────────────────
+  // Click on a check button toggles state
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.check');
+    if (btn) {
+      App.toggle(btn.dataset.group, btn.dataset.id);
+      return;
+    }
+    // Click on title also toggles (nicer UX)
+    const ttl = e.target.closest('[data-toggle]');
+    if (ttl) {
+      App.toggle('done', ttl.dataset.toggle);
+      return;
+    }
+    // Click on whole food card
+    const food = e.target.closest('[data-food]');
+    if (food) {
+      App.toggle('food', food.dataset.food);
+      return;
+    }
+  });
+
+  // Journal textareas
+  $$('textarea[data-journal]').forEach(ta => {
+    const n = +ta.dataset.journal;
+    ta.value = App.getJournal(n);
+    const update = () => {
+      App.setJournal(n, ta.value);
+      const c = $(`[data-jcount="${n}"]`);
+      if (c) c.textContent = `${ta.value.length} chars`;
+    };
+    ta.addEventListener('input', update);
+    update();
+  });
+
+  // ── UI refresh on state change ──────────────────────
+  function refresh() {
+    // schedule items
+    T.days.forEach(d => {
+      d.blocks.forEach((_, idx) => {
+        const id = `d${d.n}-${idx}`;
+        const item = $(`[data-item="${id}"]`);
+        const check = item?.querySelector('.check');
+        const done = App.isDone('done', id);
+        if (check) check.classList.toggle('checked', done);
+        if (item) item.classList.toggle('done', done);
+      });
+      // per-day progress
+      const s = App.dayStats(d.n);
+      const dn = $(`[data-day-done="${d.n}"]`);
+      const df = $(`[data-day-fill="${d.n}"]`);
+      if (dn) dn.textContent = s.done;
+      if (df) df.style.transform = `scaleX(${s.total ? s.done/s.total : 0})`;
+      // jump chip
+      const jc = $(`[data-jump="${d.n}"]`);
+      if (jc) {
+        const status = App.dayStatus(d.n);
+        jc.classList.toggle('today', status === 'today');
+        jc.classList.toggle('past', status === 'past');
+        jc.classList.toggle('done', s.done === s.total && s.total > 0);
+        const csign = jc.querySelector('.checkSign');
+        if (csign) csign.classList.toggle('hidden', !(s.done === s.total && s.total > 0));
+        const fill = jc.querySelector('.miniBar .fill');
+        if (fill) fill.style.transform = `scaleX(${s.total ? s.done/s.total : 0})`;
+      }
+      // day card today border + status pill
+      const card = $(`#day-${d.n}`);
+      if (card) {
+        const status = App.dayStatus(d.n);
+        card.classList.toggle('today', status === 'today');
+        card.classList.toggle('past', status === 'past');
+        // Today stamp
+        let stamp = card.querySelector('.todayStamp');
+        if (status === 'today' && !stamp) {
+          stamp = document.createElement('div');
+          stamp.className = 'todayStamp';
+          stamp.textContent = 'TODAY';
+          card.querySelector('.dayHead').appendChild(stamp);
+        } else if (status !== 'today' && stamp) {
+          stamp.remove();
+        }
+        const pill = card.querySelector('[data-status]');
+        if (pill) {
+          pill.className = 'statusPill ' + status;
+          pill.textContent = status;
+        }
+      }
+    });
+
+    // food
+    T.food.forEach((_, i) => {
+      const fc = $(`[data-food="f-${i}"]`);
+      if (fc) fc.classList.toggle('tried', App.isDone('food', `f-${i}`));
+    });
+
+    // bookings
+    T.bookings.forEach((_, i) => {
+      const row = $(`[data-book="${i}"]`);
+      const check = row?.querySelector('.check');
+      const done = App.isDone('bookings', `bk-${i}`);
+      if (row) row.classList.toggle('done', done);
+      if (check) check.classList.toggle('checked', done);
+    });
+
+    // packing
+    T.pack.forEach((_, i) => {
+      const row = $(`[data-pack="${i}"]`);
+      const check = row?.querySelector('.check');
+      const done = App.isDone('packing', `pk-${i}`);
+      if (row) row.classList.toggle('done', done);
+      if (check) check.classList.toggle('checked', done);
+    });
+
+    // global stats
+    const stats = App.tripStats();
+    const fdone = T.food.filter((_,i)=>App.isDone('food', `f-${i}`)).length;
+    $('#progTxt').textContent = `${stats.stops.done} / ${stats.stops.total}`;
+    $('#progFill').style.width = `${stats.stops.total ? (stats.stops.done/stats.stops.total*100) : 0}%`;
+    $('#heroDoneN').textContent = stats.stops.done;
+    $('#heroDoneFill').style.transform = `scaleX(${stats.stops.total ? stats.stops.done/stats.stops.total : 0})`;
+    $('#foodDone').textContent = fdone;
+    $('#bookCount').textContent = `${stats.book.done} / ${stats.book.total} confirmed`;
+    $('#packCount').textContent = `${stats.pack.done} / ${stats.pack.total} packed`;
+
+    // days "started"
+    const startedDays = T.days.filter(d => App.dayStats(d.n).done > 0).length;
+    $('#dayDoneSummary').textContent = `${startedDays} of 7 days started`;
+
+    // countdown / HUD
+    const cd = App.countdown();
+    const cdEl = $('#countdown');
+    const hudLbl = $('#hudLbl');
+    const hudVal = $('#hudVal');
+    if (cd.phase === 'pre') {
+      cdEl.innerHTML = `<div class="n">${cd.daysToGo}</div><div class="l">${cd.daysToGo===1?'day':'days'} to go</div>`;
+      hudLbl.textContent = 'Days until takeoff';
+      hudVal.textContent = `${cd.daysToGo} ${cd.daysToGo===1?'day':'days'}`;
+    } else if (cd.phase === 'during') {
+      cdEl.innerHTML = `<div class="n">Day ${cd.dayN}</div><div class="l">of 7 · today</div>`;
+      hudLbl.textContent = 'Currently on';
+      hudVal.textContent = `Day ${cd.dayN} of 7`;
+    } else {
+      cdEl.innerHTML = `<div class="n">Home</div><div class="l">${cd.daysSince}d since landing</div>`;
+      hudLbl.textContent = 'Trip ended';
+      hudVal.textContent = `${cd.daysSince}d ago`;
+    }
+  }
+
+  App.on(refresh);
+  refresh();
+
+  // ── HUD controls ────────────────────────────────────
+  $('#hudPill').addEventListener('click', () => $('#hudMini').classList.toggle('hidden'));
+  const fd = $('#fakeDate');
+  fd.value = App.getFakedDate() || '';
+  fd.addEventListener('change', () => App.setFakedDate(fd.value));
+  $('#clearFake').addEventListener('click', () => { fd.value = ''; App.setFakedDate(null); });
+
+  // ── Top bar controls ────────────────────────────────
+  $('#btnJump').addEventListener('click', () => {
+    const cd = App.countdown();
+    let target = null;
+    if (cd.phase === 'during') target = `#day-${cd.dayN}`;
+    else if (cd.phase === 'pre') target = `#day-1`;
+    else target = `#day-7`;
+    const el = document.querySelector(target);
+    if (el) window.scrollTo({ top: el.offsetTop - 100, behavior:'smooth' });
+  });
+  $('#btnReset').addEventListener('click', () => App.resetAll());
+};
+</script>
+</body>
+</html>
