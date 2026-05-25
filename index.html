@@ -378,6 +378,133 @@
   /* helpers */
   .hidden{display:none !important}
 
+  /* ── Mobile ≤ 600px ────────────────────────────────── */
+  @media(max-width:600px){
+    /* page container */
+    .page{min-width:0;width:100%}
+
+    /* lock screen */
+    #lockOverlay h2{font-size:32px}
+    #lockOverlay .lockBox{flex-direction:column;width:85%;max-width:320px}
+    #lockPw{width:100%}
+    #lockBtn{width:100%;padding:14px}
+
+    /* sticky bar */
+    .tripBar{grid-template-columns:1fr 1fr;gap:12px;padding:10px 16px}
+    .tripBar .progressWrap{grid-column:1/-1;max-width:100%}
+    .tripBar .btnRow{justify-content:flex-end}
+
+    /* top strip */
+    .strip{flex-direction:column;gap:8px;padding:12px 16px;align-items:flex-start}
+    .strip .right{gap:8px;flex-wrap:wrap}
+
+    /* hero */
+    .hero{padding:24px 16px 16px}
+    .heroTop{grid-template-columns:1fr;gap:16px}
+    h1.bigTitle{font-size:64px}
+    h1.bigTitle .sub{font-size:28px}
+    h1.bigTitle .star{font-size:28px;top:6px;right:8px}
+    .heroDeck{font-size:18px;margin-top:12px}
+    .heroR{display:none}
+    .heroEy{font-size:10px;letter-spacing:.12em}
+
+    /* hero stats bar */
+    .heroBar{grid-template-columns:repeat(3,1fr);gap:0;margin:20px 16px 0}
+    .heroBar .col{padding:12px 10px}
+    .heroBar .col .v{font-size:24px}
+    .heroBar .col:nth-child(4),.heroBar .col:nth-child(5){border-top:2px solid var(--ink)}
+    .heroBar .col:nth-child(4){grid-column:1/span 1}
+    .heroBar .col:nth-child(3){border-right:none}
+
+    /* section heads */
+    section{padding:40px 16px 0}
+    .secHead{flex-direction:column;gap:12px;align-items:flex-start}
+    .secHead h2{font-size:36px}
+    .secHead .meta{text-align:left}
+
+    /* essentials: ticket, hotel, people */
+    .essRow{grid-template-columns:1fr;gap:16px}
+    .ticket{padding:16px}
+    .ticket::before,.ticket::after{display:none}
+    .leg{grid-template-columns:1fr;gap:8px;text-align:left}
+    .leg .city{font-size:28px}
+    .leg .mid{display:flex;gap:8px;justify-content:flex-start;align-items:center}
+    .leg .mid .code,.leg .mid .plane,.leg .mid .dur{text-align:left}
+    .leg .r{text-align:left}
+    .hotelCard{transform:none;padding:16px}
+    .hotelCard h3{font-size:24px}
+    .hotelCard .stamp{width:56px;height:56px;font-size:8px;top:10px;right:10px}
+    .pplCard{transform:none;padding:16px}
+    .pplCard .row{grid-template-columns:36px 1fr auto;gap:8px}
+
+    /* day jump chips */
+    .dayJump{grid-template-columns:repeat(4,1fr);gap:6px}
+    .jchip{padding:10px 8px 8px}
+    .jchip .d{font-size:16px}
+    .jchip .n,.jchip .when{font-size:9px}
+
+    /* day cards */
+    .dayCard{padding:16px;scroll-margin-top:90px}
+    .dayCard::after{display:none}
+    .dayHead{grid-template-columns:auto 1fr;gap:12px}
+    .dayHead .num{font-size:56px}
+    .dayHead .mid h3{font-size:24px}
+    .dayHead .mid .tag{font-size:13px}
+    .dayHead .right{display:none}
+    .dayBody{grid-template-columns:1fr}
+
+    /* schedule items */
+    .item{grid-template-columns:52px 24px 1fr;gap:8px;padding:10px 0}
+    .item .t{font-size:11px;padding-top:6px}
+    .item .b .ttl{font-size:16px}
+    .item .b .sub{font-size:12px}
+    .item.done .b .ttl::after{display:none}
+
+    /* day aside (map, notepad, journal) */
+    .dayAside{gap:12px}
+    .mapCard{transform:none}
+    .mapCard iframe{height:180px}
+    .notepad{transform:none;padding:12px}
+    .journal{transform:none;padding:12px}
+    .journal textarea{font-size:18px;min-height:60px}
+
+    /* food grid */
+    .foodGrid{grid-template-columns:1fr;gap:12px}
+    .foodCard{transform:none !important}
+    .foodCard .dish{font-size:22px}
+
+    /* money */
+    .moneyRow{grid-template-columns:1fr;gap:16px}
+    .moneyCard{padding:16px}
+    .moneyCard h3{font-size:24px;flex-direction:column;gap:4px}
+    .moneyCard .total .v{font-size:28px}
+    .bookRow{grid-template-columns:24px 1fr auto;gap:8px}
+    .bookRow .wh{display:none}
+    .bRow{grid-template-columns:auto 1fr auto;gap:8px}
+    .bRow .l{font-size:14px}
+
+    /* practical + packing */
+    .practRow{grid-template-columns:1fr;gap:16px}
+    .pCard{padding:16px}
+    .pCard h3{font-size:24px}
+    .pRow{grid-template-columns:100px 1fr;gap:8px;padding:8px 0}
+    .packList{grid-template-columns:1fr;gap:6px}
+
+    /* footer */
+    footer{padding:32px 16px}
+    footer .inner{grid-template-columns:1fr;gap:20px}
+    footer .bigLine{font-size:28px}
+    footer .signoff{text-align:left}
+
+    /* HUD */
+    .hud{right:12px;bottom:12px}
+    .hudPill{padding:10px 14px}
+    .hudPill .v{font-size:14px}
+
+    /* today stamp */
+    .todayStamp{font-size:16px;padding:4px 12px;right:10px;top:-12px}
+  }
+
   /* print */
   @media print{
     .tripBar,.hud{display:none}
