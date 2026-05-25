@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <title>Singapore · A family postcard journal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d6532c">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Yeseva+One&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
@@ -951,6 +955,11 @@ window.bootTrip = function() {
   });
   $('#btnReset').addEventListener('click', () => App.resetAll());
 };
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
 </script>
 </body>
 </html>

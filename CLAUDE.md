@@ -77,6 +77,24 @@ State key: `sg2026_trip_state_v1` in localStorage.
 
 Each day card has a Google Maps embed iframe (`loading="lazy"`). The `mapQuery` field in each day's data controls the map center. Uses the no-API-key embed format: `https://maps.google.com/maps?q=<query>&t=m&z=14&output=embed`.
 
+## PWA / Offline Support
+
+The site is an installable Progressive Web App. Users can "Add to Home Screen" on mobile or "Install" on desktop.
+
+**Files:**
+- `manifest.json` — app name, icons, theme color, standalone display mode
+- `sw.js` — service worker with network-first caching strategy
+- `icon-192.png`, `icon-512.png` — PWA icons (coral SG seal)
+
+**Caching strategy:**
+- **App assets** (HTML, JS, .enc): network-first — fetches fresh copy when online, falls back to cache when offline. This means updates are picked up automatically on next online visit.
+- **Google Fonts**: cache-first — fonts are immutable, cached permanently after first load.
+- **Google Maps iframes**: never cached — maps require network, they just won't load offline (rest of the site still works).
+
+**Cache version:** `sg2026-v1` in `sw.js`. Bump the version string to force a full cache refresh (old caches are auto-deleted on activate).
+
+**Update flow:** Push new code → user opens site while online → SW fetches fresh assets → next page load uses updated versions. No manual intervention needed.
+
 ## What's encrypted vs public
 
 | Encrypted (in .enc) | Public (in repo) |
