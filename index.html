@@ -296,6 +296,11 @@
   .bookRow .ur{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--ink);background:var(--paper-2);white-space:nowrap}
   .bookRow .ur.now{background:var(--coral);color:#fff;border-color:var(--coral)}
   .bookRow .ur.this{background:var(--mustard);color:#fff;border-color:var(--mustard)}
+  .bookRow .ur.todo{background:#e74c3c;color:#fff;border-color:#e74c3c;animation:pulse 2s infinite}
+  .bookRow .ur.pending{background:var(--plum);color:#fff;border-color:var(--plum)}
+  .bookRow .ur.decide{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .bookRow .ur.booked{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
   .bRow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--rule)}
   .bRow .cat{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding:3px 6px;border:1px solid var(--rule);background:var(--paper-2);white-space:nowrap}
@@ -858,7 +863,7 @@ window.bootTrip = function() {
     </div>`).join('');
 
   // ── Bookings ──
-  const urgClass = (u) => u==='NOW' ? 'now' : (u.includes('Before')||u.includes('Tue')||u.includes('This')?'this':'');
+  const urgClass = (u) => u.startsWith('TODO') ? 'todo' : u.startsWith('PENDING') ? 'pending' : u.startsWith('Decide') ? 'decide' : u.startsWith('BOOKED') ? 'booked' : u==='NOW' ? 'now' : (u.includes('Before')||u.includes('Tue')||u.includes('This')?'this':'');
   $('#bookList').innerHTML = T.bookings.map((b,i)=>`
     <div class="bookRow" data-book="${i}">
       <button class="check" data-group="bookings" data-id="bk-${i}" aria-label="Mark confirmed"></button>
