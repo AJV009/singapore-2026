@@ -685,11 +685,31 @@
     </div>
   </section>
 
+  <!-- ── Pre-trip checklist ─────────────────────────── -->
+  <section>
+    <div class="secHead">
+      <div class="l">
+        <div class="ey">§ 05 — before we fly</div>
+        <h2>Pre-trip <em>checklist.</em></h2>
+      </div>
+    </div>
+    <div class="practRow">
+      <div class="pCard">
+        <h3>Documents <span class="count" id="docCount"></span></h3>
+        <div id="docList"></div>
+      </div>
+      <div class="pCard">
+        <h3>Pre-trip TODOs <span class="count" id="todoCount"></span></h3>
+        <div id="todoList"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Practical ─────────────────────────────────── -->
   <section>
     <div class="secHead">
       <div class="l">
-        <div class="ey">§ 05 — the rest of it</div>
+        <div class="ey">§ 06 — the rest of it</div>
         <h2>Field <em>notes.</em></h2>
       </div>
     </div>
@@ -890,6 +910,30 @@ window.bootTrip = function() {
     </div>`;
   }).join('');
 
+  // ── Documents ──
+  if (T.documents) {
+    $('#docList').innerHTML = T.documents.map((d,i)=>`
+      <div class="bookRow" data-doc="${i}">
+        <button class="check" data-group="docs" data-id="doc-${i}" aria-label="Mark done"></button>
+        <div class="nm">${d.doc}</div>
+        <div class="ur ${d.status.startsWith('DONE') ? 'booked' : d.status.startsWith('TODO') ? 'todo' : ''}">${d.status}</div>
+      </div>`).join('');
+    const docDone = T.documents.filter((_,i)=>App.isDone('docs','doc-'+i)).length;
+    $('#docCount').textContent = `${docDone} / ${T.documents.length} ready`;
+  }
+
+  // ── Pre-trip TODOs ──
+  if (T.preTripTodos) {
+    $('#todoList').innerHTML = T.preTripTodos.map((t,i)=>`
+      <div class="bookRow" data-todo="${i}">
+        <button class="check" data-group="pretodo" data-id="pt-${i}" aria-label="Mark done"></button>
+        <div class="nm">${t.task}</div>
+        <div class="ur ${t.urgency.startsWith('TODO') ? 'todo' : t.urgency.startsWith('PENDING') ? 'pending' : t.urgency.startsWith('Decide') ? 'decide' : t.urgency === 'On arrival' ? 'this' : ''}">${t.urgency}</div>
+      </div>`).join('');
+    const todoDone = T.preTripTodos.filter((_,i)=>App.isDone('pretodo','pt-'+i)).length;
+    $('#todoCount').textContent = `${todoDone} / ${T.preTripTodos.length} done`;
+  }
+
   // ── Practical ──
   $('#practList').innerHTML = T.practical.map(p=>`
     <div class="pRow"><div class="k">${p.k}</div><div class="v">${p.v}</div></div>`).join('');
@@ -1016,6 +1060,32 @@ window.bootTrip = function() {
       if (row) row.classList.toggle('done', done);
       if (check) check.classList.toggle('checked', done);
     });
+
+    // documents
+    if (T.documents) T.documents.forEach((_, i) => {
+      const row = $(`[data-doc="${i}"]`);
+      const check = row?.querySelector('.check');
+      const done = App.isDone('docs', `doc-${i}`);
+      if (row) row.classList.toggle('done', done);
+      if (check) check.classList.toggle('checked', done);
+    });
+    if (T.documents) {
+      const docDone = T.documents.filter((_,i)=>App.isDone('docs','doc-'+i)).length;
+      $('#docCount').textContent = `${docDone} / ${T.documents.length} ready`;
+    }
+
+    // pre-trip TODOs
+    if (T.preTripTodos) T.preTripTodos.forEach((_, i) => {
+      const row = $(`[data-todo="${i}"]`);
+      const check = row?.querySelector('.check');
+      const done = App.isDone('pretodo', `pt-${i}`);
+      if (row) row.classList.toggle('done', done);
+      if (check) check.classList.toggle('checked', done);
+    });
+    if (T.preTripTodos) {
+      const todoDone = T.preTripTodos.filter((_,i)=>App.isDone('pretodo','pt-'+i)).length;
+      $('#todoCount').textContent = `${todoDone} / ${T.preTripTodos.length} done`;
+    }
 
     // global stats
     const stats = App.tripStats();
