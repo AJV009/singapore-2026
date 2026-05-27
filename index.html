@@ -164,10 +164,10 @@
   .pplCard .r{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
 
   /* ── Quick-access bar ────────────────────────────────── */
-  .quickLinks{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-  .quickLinks a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;background:var(--paper-2);border:1.5px solid var(--rule);color:var(--ink);text-decoration:none;transition:transform .15s, box-shadow .15s, border-color .15s}
-  .quickLinks a:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink);border-color:var(--ink)}
-  .quickLinks a .icon{font-size:14px}
+  .quickLinks{display:inline-flex;gap:10px;align-items:center}
+  .quickLinks a{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;background:rgba(255,255,255,.45);border:1.5px solid var(--rule);color:var(--ink);text-decoration:none;transition:border-color .15s,background .15s}
+  .quickLinks a:hover{border-color:var(--ink);background:#fff}
+  .quickLinks a .icon{font-size:12px}
 
   /* ── Day chip nav ──────────────────────────────────── */
   .dayJump{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:32px}
@@ -307,6 +307,10 @@
   .bookRow .ur.decide{background:var(--teal);color:#fff;border-color:var(--teal)}
   .bookRow .ur.booked{background:var(--leaf);color:#fff;border-color:var(--leaf)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+  /* doc/todo rows — 3 columns (no .wh), status wraps */
+  #docList .bookRow,#todoList .bookRow{grid-template-columns:24px 1fr auto}
+  #docList .ur,#todoList .ur{white-space:normal;text-align:right;max-width:220px;font-size:9px;line-height:1.4}
 
   .bRow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px dashed var(--rule)}
   .bRow .cat{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding:3px 6px;border:1px solid var(--rule);background:var(--paper-2);white-space:nowrap}
@@ -494,6 +498,14 @@
     .bRow{grid-template-columns:auto 1fr auto;gap:8px}
     .bRow .l{font-size:14px}
 
+    /* quick links in strip */
+    .quickLinks{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+    .quickLinks a{font-size:9px;padding:4px 8px}
+
+    /* doc/todo status badges */
+    #docList .ur,#todoList .ur{max-width:140px;font-size:8px}
+    #docList .bookRow,#todoList .bookRow{gap:6px}
+
     /* practical + packing */
     .practRow{grid-template-columns:1fr;gap:16px}
     .pCard{padding:16px}
@@ -567,13 +579,11 @@
       <div class="t">A family postcard from Singapore</div>
     </div>
     <div class="right">
+      <span class="quickLinks" id="quickLinks"></span>
       <span class="item">Vol. 26 · Issue 06</span>
       <span class="stamp" id="stripDates"></span>
     </div>
   </div>
-
-  <!-- ── Quick-access links (rendered from encrypted data) ── -->
-  <div class="quickLinks" id="quickLinks"></div>
 
   <!-- ── Hero ──────────────────────────────────────── -->
   <header class="hero">
