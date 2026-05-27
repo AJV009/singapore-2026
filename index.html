@@ -163,6 +163,12 @@
   .pplCard .t{font-size:12px;color:var(--ink-2);margin-top:2px}
   .pplCard .r{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
 
+  /* ── Quick-access bar ────────────────────────────────── */
+  .quickLinks{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+  .quickLinks a{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;background:var(--paper-2);border:1.5px solid var(--rule);color:var(--ink);text-decoration:none;transition:transform .15s, box-shadow .15s, border-color .15s}
+  .quickLinks a:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink);border-color:var(--ink)}
+  .quickLinks a .icon{font-size:14px}
+
   /* ── Day chip nav ──────────────────────────────────── */
   .dayJump{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:32px}
   .jchip{background:#fff;border:2px solid var(--ink);padding:14px 14px 12px;cursor:pointer;text-decoration:none;color:var(--ink);position:relative;transition:transform .15s, box-shadow .15s}
@@ -537,7 +543,7 @@
       <div class="seal">SG</div>
       <div>
         <div class="t">Singapore <span style="color:var(--coral)">2026</span></div>
-        <div class="s">29 May → 4 June · party of four</div>
+        <div class="s" id="barSub"></div>
       </div>
     </div>
     <div class="progressWrap">
@@ -562,49 +568,44 @@
     </div>
     <div class="right">
       <span class="item">Vol. 26 · Issue 06</span>
-      <span class="stamp">29 May → 04 Jun · 2026</span>
+      <span class="stamp" id="stripDates"></span>
     </div>
   </div>
+
+  <!-- ── Quick-access links (rendered from encrypted data) ── -->
+  <div class="quickLinks" id="quickLinks"></div>
 
   <!-- ── Hero ──────────────────────────────────────── -->
   <header class="hero">
     <div class="heroTop">
       <div class="heroL">
-        <div class="heroEy">A one-week postcard journal · REDACTED</div>
+        <div class="heroEy" id="heroEy"></div>
         <h1 class="bigTitle">
           Singa<span class="star">✺</span>pore<br>
           <span class="sub">the family edition.</span>
         </h1>
-        <p class="heroDeck">Temple trinities, a chocolate factory matinee, two mornings at Mandai, one Michelin Peranakan dinner, and one packed Sentosa day before the dawn flight home — tick things off as we go, scribble notes, paste in photos.</p>
+        <p class="heroDeck" id="heroDeck"></p>
       </div>
       <div class="heroR">
         <div class="postcard-stack">
           <div class="pc"></div>
-          <div class="pc">
-            <div class="l">Flight</div>
-            <div class="v coral">REDACTED</div>
-            <div class="row"><span>REDACTED</span><b>10:05 → 18:30</b></div>
-          </div>
-          <div class="pc">
-            <div class="l">Stay · 5 nights</div>
-            <div class="v">REDACTED</div>
-            <div class="row"><span>City Hall · 5 min walk</span><b>2 BR suite</b></div>
-          </div>
+          <div class="pc" id="pcFlight"></div>
+          <div class="pc" id="pcHotel"></div>
         </div>
       </div>
     </div>
   </header>
 
   <div class="heroBar">
-    <div class="col"><div class="l">Travellers</div><div class="v">04</div><div class="s">Dad · Mum · You · Sister</div></div>
-    <div class="col"><div class="l">Days</div><div class="v coral">07</div><div class="s">5 nights at REDACTED</div></div>
-    <div class="col"><div class="l">Stops planned</div><div class="v teal" id="heroTotalStops">53</div><div class="s">across the seven days</div></div>
+    <div class="col"><div class="l">Travellers</div><div class="v" id="heroTravN"></div><div class="s" id="heroTravS"></div></div>
+    <div class="col"><div class="l">Days</div><div class="v coral" id="heroDaysN"></div><div class="s" id="heroDaysS"></div></div>
+    <div class="col"><div class="l">Stops planned</div><div class="v teal" id="heroTotalStops"></div><div class="s">across the seven days</div></div>
     <div class="col">
       <div class="l">Checked off</div>
       <div class="v good" id="heroDoneN">0</div>
       <div class="mini"><div class="fill" id="heroDoneFill" style="transform:scaleX(0)"></div></div>
     </div>
-    <div class="col"><div class="l">All-in</div><div class="v">₹3.5 L</div><div class="s">realistic, four pax</div></div>
+    <div class="col"><div class="l">All-in</div><div class="v" id="heroBudget"></div><div class="s">realistic, four pax</div></div>
   </div>
 
   <!-- ── Essentials ────────────────────────────────── -->
@@ -616,28 +617,8 @@
       </div>
     </div>
     <div class="essRow">
-      <div class="ticket">
-        <div class="tHead"><div class="l">Air India · Economy Value</div><div class="r">PNR · REDACTED</div></div>
-        <div class="leg">
-          <div><div class="city">BOM</div><div class="when">Fri 29 May · REDACTED</div></div>
-          <div class="mid"><div class="code">REDACTED</div><div class="plane">✈</div><div class="dur">5h 55m</div></div>
-          <div class="r"><div class="city">SIN</div><div class="when">Fri 29 May · REDACTED</div></div>
-        </div>
-        <div class="leg">
-          <div><div class="city">SIN</div><div class="when">Thu 04 Jun · REDACTED</div></div>
-          <div class="mid"><div class="code">REDACTED</div><div class="plane">✈</div><div class="dur">5h 40m</div></div>
-          <div class="r"><div class="city">BOM</div><div class="when">Thu 04 Jun · REDACTED</div></div>
-        </div>
-      </div>
-
-      <div class="hotelCard">
-        <div class="stamp">5 nights<br>City Hall</div>
-        <div class="l">Stay</div>
-        <h3>REDACTED<br>Singapore</h3>
-        <p>REDACTED · City Hall MRT five minutes on foot · two-bedroom suite for the four of us · breakfast included.</p>
-        <div class="mm"><span>Agoda · REDACTED</span></div>
-        <div class="mm" style="margin-top:4px"><span>Visa REDACTED · non-refundable</span></div>
-      </div>
+      <div class="ticket" id="flightTicket"></div>
+      <div class="hotelCard" id="hotelCard"></div>
 
       <div class="pplCard">
         <div class="l">The party</div>
@@ -730,11 +711,9 @@
 
   <footer>
     <div class="inner">
-      <div class="bigLine">Eat the satay <em>outdoors,</em><br>skip Tian Tian, and reach<br>the airport <em>four hours</em> early.</div>
-      <div class="signoff">
+      <div class="bigLine">Eat the satay <em>outdoors,</em><br>skip the tourist traps, and reach<br>the airport <em>four hours</em> early.</div>
+      <div class="signoff" id="footerSignoff">
         SG · 2026<br>
-        For REDACTED<br>
-        REDACTED<br><br>
         Tick · scribble · paste<br>
         Postcard journal · v.2
       </div>
@@ -768,6 +747,39 @@ window.bootTrip = function() {
   const App = window.TripApp;
   const ini = (n) => n.split(' ').map(p=>p[0]).slice(0,2).join('');
   const $ = (s, r=document) => r.querySelector(s);
+
+  // ── Quick-access links (from encrypted data) ──
+  if (T.quickLinks && T.quickLinks.length) {
+    $('#quickLinks').innerHTML = T.quickLinks.map(l =>
+      `<a href="${l.url}" target="_blank" rel="noopener"><span class="icon">${l.icon}</span> ${l.label}</a>`
+    ).join('');
+  }
+
+  // ── Fill header/hero/essentials from encrypted data ──
+  const M = T.meta;
+  const O = M.outbound, I = M.inbound;
+  $('#barSub').textContent = M.dates + ' · party of ' + M.travellers;
+  $('#heroEy').textContent = 'A one-week postcard journal · ' + O.route.replace('→','→') + ' → ' + O.route.split(' → ')[0];
+  $('#heroDeck').textContent = T.heroDeck || '';
+  $('#pcFlight').innerHTML = `<div class="l">Flight</div><div class="v coral">${O.code}</div><div class="row"><span>${O.route}</span><b>${O.dep} → ${O.arr}</b></div>`;
+  $('#pcHotel').innerHTML = `<div class="l">Stay · 5 nights</div><div class="v">${M.hotel}</div><div class="row"><span>${M.hotelAddress}</span><b>2 BR suite</b></div>`;
+  $('#heroTravN').textContent = String(M.travellers).padStart(2,'0');
+  $('#heroTravS').textContent = T.travellers.map(t=>t.role).join(' · ');
+  $('#heroDaysN').textContent = String(T.days.length).padStart(2,'0');
+  $('#heroDaysS').textContent = M.duration;
+  $('#heroBudget').textContent = M.budget;
+  $('#flightTicket').innerHTML = `
+    <div class="tHead"><div class="l">Air India · Economy Value</div><div class="r">PNR · ${M.pnr}</div></div>
+    <div class="leg"><div><div class="city">${O.route.split(' → ')[0]}</div><div class="when">${O.date} · ${O.dep}</div></div><div class="mid"><div class="code">${O.code}</div><div class="plane">✈</div><div class="dur">5h 55m</div></div><div class="r"><div class="city">${O.route.split(' → ')[1]}</div><div class="when">${O.date} · ${O.arr}</div></div></div>
+    <div class="leg"><div><div class="city">${I.route.split(' → ')[0]}</div><div class="when">${I.date} · ${I.dep}</div></div><div class="mid"><div class="code">${I.code}</div><div class="plane">✈</div><div class="dur">5h 40m</div></div><div class="r"><div class="city">${I.route.split(' → ')[1]}</div><div class="when">${I.date} · ${I.arr}</div></div></div>`;
+  $('#hotelCard').innerHTML = `
+    <div class="stamp">5 nights<br>${M.hotelAddress.split(' · ')[1]}</div>
+    <div class="l">Stay</div>
+    <h3>${M.hotel}<br>Singapore</h3>
+    <p>${M.hotelAddress} · two-bedroom suite for the four of us · breakfast included.</p>
+    ${T.hotelRefs ? T.hotelRefs.map(r=>`<div class="mm"><span>${r}</span></div>`).join('') : ''}`;
+  $('#footerSignoff').innerHTML = `SG · 2026<br>For ${T.travellers.map(t=>t.name.split(' ')[0]).join(' · ')}<br><br>Tick · scribble · paste<br>Postcard journal · v.2`;
+  $('#stripDates').textContent = M.dates.replace('→','→') + ' · 2026';
   const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 
   // ── Travellers ──
@@ -789,15 +801,7 @@ window.bootTrip = function() {
     </a>`).join('');
 
   // ── Day cards ──
-  const dayMoods = {
-    1:['Hello, Singapore.','arrival evening'],
-    2:['The anchor day.','heritage + matinee + crab'],
-    3:['Sunday slow.','mass · gardens · trees that sing'],
-    4:['Birds, then pandas.','Mandai · day one'],
-    5:['Canopy &amp; Candlenut.','adventure · ION · Michelin'],
-    6:['Sentosa, all of it.','the packed day'],
-    7:['One last walk.','Jewel + home'],
-  };
+  const dayMoods = T.dayMoods || {};
 
   $('#dayList').innerHTML = T.days.map(d=>`
     <article class="dayCard" data-n="${d.n}" id="day-${d.n}">
@@ -875,24 +879,7 @@ window.bootTrip = function() {
   // ── Budget ── (informational — booking confirmation lives in Bookings)
   // Each line is tagged: "pre-book" = covered by a Bookings row,
   // "in-trip" = paid at point of sale (food / transport / shopping / optional).
-  const budgetCat = {
-    'Mandai 3-Park Pass · S$98×4': 'book',
-    'USS + Express Pass': 'book',
-    'Singapore Flyer': 'payg',
-    'Gardens by the Bay': 'book',
-    'ArtScience Museum': 'book',
-    'Cable Car + Arbora cake': 'book',
-    'Skyline Luge': 'book',
-    'Wings of Time': 'book',
-    'MegaZip (×3)': 'payg',
-    'Harry Potter VOM': 'book',
-    'Charlie & Choc Factory': 'book',
-    'Candlenut Michelin': 'book',
-    'Food (week)': 'payg',
-    'Transport': 'payg',
-    'Gap night at Changi': 'book',
-    'Shopping headroom': 'payg',
-  };
+  const budgetCat = T.budgetCat || {};
   $('#budgetRows').innerHTML = T.budget.map((b)=>{
     const c = budgetCat[b.row] || 'payg';
     return `
