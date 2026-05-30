@@ -671,38 +671,11 @@
     <div class="foodGrid" id="foodGrid"></div>
   </section>
 
-  <!-- ── Money ─────────────────────────────────────── -->
-  <section>
-    <div class="secHead">
-      <div class="l">
-        <div class="ey">§ 04 — money, line by line</div>
-        <h2>The <em>damages.</em></h2>
-      </div>
-      <div class="meta">
-        <div>Tick bookings as you confirm them</div>
-      </div>
-    </div>
-    <div class="moneyRow">
-      <div class="moneyCard">
-        <h3>Bookings to make <span class="count" id="bookCount">0 / 11 confirmed</span></h3>
-        <div id="bookList"></div>
-      </div>
-      <div class="moneyCard">
-        <h3>Where it goes <span class="count">16 lines · what you'll pay for</span></h3>
-        <div id="budgetRows"></div>
-        <div class="total">
-          <div class="l">Grand total · 4 pax</div>
-          <div class="v">₹3.23 – 3.84 L</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ── Pre-trip checklist ─────────────────────────── -->
   <section>
     <div class="secHead">
       <div class="l">
-        <div class="ey">§ 05 — before we fly</div>
+        <div class="ey">§ 04 — before we fly</div>
         <h2>Pre-trip <em>checklist.</em></h2>
       </div>
     </div>
@@ -722,7 +695,7 @@
   <section>
     <div class="secHead">
       <div class="l">
-        <div class="ey">§ 06 — the rest of it</div>
+        <div class="ey">§ 05 — the rest of it</div>
         <h2>Field <em>notes.</em></h2>
       </div>
     </div>
@@ -899,30 +872,6 @@ window.bootTrip = function() {
       </div>
     </div>`).join('');
 
-  // ── Bookings ──
-  const urgClass = (u) => u.startsWith('TODO') ? 'todo' : u.startsWith('PENDING') ? 'pending' : u.startsWith('Decide') ? 'decide' : u.startsWith('BOOKED') ? 'booked' : u==='NOW' ? 'now' : (u.includes('Before')||u.includes('Tue')||u.includes('This')?'this':'');
-  $('#bookList').innerHTML = T.bookings.map((b,i)=>`
-    <div class="bookRow" data-book="${i}">
-      <button class="check" data-group="bookings" data-id="bk-${i}" aria-label="Mark confirmed"></button>
-      <div class="nm">${b.name}</div>
-      <div class="wh">${b.when}</div>
-      <div class="ur ${urgClass(b.urgency)}">${b.urgency}</div>
-    </div>`).join('');
-
-  // ── Budget ── (informational — booking confirmation lives in Bookings)
-  // Each line is tagged: "pre-book" = covered by a Bookings row,
-  // "in-trip" = paid at point of sale (food / transport / shopping / optional).
-  const budgetCat = T.budgetCat || {};
-  $('#budgetRows').innerHTML = T.budget.map((b)=>{
-    const c = budgetCat[b.row] || 'payg';
-    return `
-    <div class="bRow">
-      <span class="cat ${c}">${c==='book'?'pre-book':'in-trip'}</span>
-      <div class="l">${b.row}</div>
-      <div class="v">₹${b.amt}</div>
-    </div>`;
-  }).join('');
-
   // ── Documents ──
   if (T.documents) {
     $('#docList').innerHTML = T.documents.map((d,i)=>`
@@ -1056,15 +1005,6 @@ window.bootTrip = function() {
       if (fc) fc.classList.toggle('tried', App.isDone('food', `f-${i}`));
     });
 
-    // bookings
-    T.bookings.forEach((_, i) => {
-      const row = $(`[data-book="${i}"]`);
-      const check = row?.querySelector('.check');
-      const done = App.isDone('bookings', `bk-${i}`);
-      if (row) row.classList.toggle('done', done);
-      if (check) check.classList.toggle('checked', done);
-    });
-
     // packing
     T.pack.forEach((_, i) => {
       const row = $(`[data-pack="${i}"]`);
@@ -1108,7 +1048,6 @@ window.bootTrip = function() {
     $('#heroDoneN').textContent = stats.stops.done;
     $('#heroDoneFill').style.transform = `scaleX(${stats.stops.total ? stats.stops.done/stats.stops.total : 0})`;
     $('#foodDone').textContent = fdone;
-    $('#bookCount').textContent = `${stats.book.done} / ${stats.book.total} confirmed`;
     $('#packCount').textContent = `${stats.pack.done} / ${stats.pack.total} packed`;
 
     // days "started"
